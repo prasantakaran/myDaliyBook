@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, duplicate_ignore, unused_local_variable
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, duplicate_ignore, unused_local_variable, must_be_immutable
 
 import 'dart:convert';
 import 'dart:io';
@@ -14,10 +14,8 @@ import 'package:mypay/Model_Class/Customers_details.dart';
 import 'package:mypay/Model_Class/contacts_model.dart';
 import 'package:mypay/ThemeScreen/Theme_controller.dart';
 import 'package:http/http.dart' as http;
-import 'package:mypay/screen/dashboard.dart';
 import 'package:mypay/url/db_connection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 import '../GetxController/Customers_controller.dart';
 
@@ -188,6 +186,7 @@ class _AddCustomerState extends State<AddCustomer> {
     );
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 175, 135, 215),
         title: Text("Add Customer"),
       ),
       body: Column(

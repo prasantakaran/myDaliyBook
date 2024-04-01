@@ -1,11 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, use_build_context_synchronously, avoid_print, prefer_interpolation_to_compose_strings, await_only_futures, must_be_immutable, unnecessary_this
 
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +14,7 @@ import 'package:mypay/Model_Class/User_Details.dart';
 import 'package:mypay/ThemeScreen/Theme_controller.dart';
 import 'package:mypay/screen/Colors_Palette.dart';
 import 'package:mypay/screen/Login.dart';
+import 'package:mypay/screen/loading.dart';
 import 'package:mypay/url/db_connection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -30,6 +32,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController phoneController;
+
+  String loginid = '';
+  void getuser_id() async {
+    sp = await SharedPreferences.getInstance();
+    loginid = sp.getString('sp_id') ?? "";
+    print(loginid);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     nameController = TextEditingController(text: widget.usersInfo.m_name);
     emailController = TextEditingController(text: widget.usersInfo.m_email);
     phoneController = TextEditingController(text: widget.usersInfo.m_phone);
+    getuser_id();
   }
 
   ThemeController themeController = Get.put(ThemeController());
@@ -60,25 +71,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future imageUpdate(String uid, File? uimage) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => LoadingDialog(),
+    );
     try {
       var request = await http.MultipartRequest(
           "POST", Uri.parse(Myurl.fullurl + "user_image_update.php"));
       request.fields['id'] = uid;
       if (uimage != null)
         request.files.add(
-          await http.MultipartFile.fromBytes(
-            "image",
-            uimage.readAsBytesSync(),
-          ),
+          await http.MultipartFile.fromBytes("image", uimage.readAsBytesSync(),
+              filename: uimage.path.split("/").last),
         );
       var response = await request.send();
       var responded = await http.Response.fromStream(response);
       var jsondata = jsonDecode(responded.body);
+      print('outside');
+
       if (jsondata['status'] == true) {
+        print('true');
+        Navigator.pop(context);
         if (!mounted) return;
+        sp = await SharedPreferences.getInstance();
+        setState(() {
+          widget.usersInfo.m_image = jsondata['imgtitle'];
+          sp.setString("sp_image", widget.usersInfo.m_image);
+        });
         Fluttertoast.showToast(msg: jsondata['msg']);
       }
     } catch (e) {
+      Navigator.pop(context);
       print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
     }
@@ -166,12 +190,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       size: 100,
                                     ),
                                   )
-                                : CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        Myurl.fullurl +
-                                            Myurl.user_imageurl +
-                                            widget.usersInfo.m_image),
+                                : CachedNetworkImage(
+                                    // width: 50,
+                                    // height: 50,
+                                    imageUrl: Myurl.fullurl +
+                                        Myurl.user_imageurl +
+                                        widget.usersInfo.m_image,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
                                   ),
+                        //  CircleAvatar(
+                        //     backgroundImage: NetworkImage(
+                        //         Myurl.fullurl +
+                        //             Myurl.user_imageurl +
+                        //             widget.usersInfo.m_image),
+                        //   ),
                       ),
                     ),
                     Positioned(
@@ -440,7 +485,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
               ),
-              onPressed: () {},
+              onPressed: () {
+                imageUpdate(loginid, file).whenComplete(() {
+                  setState(() {});
+                });
+                // Fluttertoast.showToast(msg: "prasant");
+              },
               icon: Icon(
                 Icons.save_alt_rounded,
                 color: themeCon.isDark.value ? Colors.white : Colors.black,

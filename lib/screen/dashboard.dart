@@ -464,94 +464,133 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 child: Obx(
-                  () => ListView.builder(
-                    controller: _controller,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: isActive
-                        ? _customersController.items.length
-                        : _customersController.items.length,
-                    itemBuilder: (BuildContext context, index) {
-                      String src = _customersController.items[index].cimage;
-                      return Slidable(
-                        startActionPane:
-                            ActionPane(motion: StretchMotion(), children: [
-                          SlidableAction(
-                            // autoClose: true,
-                            onPressed: (context) {
-                              var del_id =
-                                  _customersController.items[index].cid;
-                              print(del_id);
-                              // _awasomeDailogBox(context);
-                              deleteCustomer(id, del_id).whenComplete(() {
-                                _customersController.items
-                                    .removeWhere((item) => item.cid == del_id);
-                                // Refresh UI
-                                _customersController.items.refresh();
-                              });
-                            },
-                            backgroundColor: Color(0xFFFE4A49),
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          ),
-                        ]),
-                        child: Card(
-                          elevation: 12,
-                          margin:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                          child: ListTile(
-                            leading: Container(
-                              child: src == ""
-                                  ? CircleAvatar(
-                                      radius: 27,
-                                      backgroundImage:
-                                          AssetImage('assets/images/my.jpg'),
-                                    )
-                                  : CachedNetworkImage(
-                                      width: 50,
-                                      height: 50,
-                                      imageUrl:
-                                          Myurl.fullurl + Myurl.imageurl + src,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
+                  () => Builder(
+                    builder: (contexts) => ListView.builder(
+                      controller: _controller,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: isActive
+                          ? _customersController.items.length
+                          : _customersController.items.length,
+                      itemBuilder: (BuildContext context, index) {
+                        String src = _customersController.items[index].cimage;
+                        return Slidable(
+                          startActionPane:
+                              ActionPane(motion: StretchMotion(), children: [
+                            SlidableAction(
+                              // autoClose: true,
+                              onPressed: (contexts) {
+                                AwesomeDialog(
+                                  context: contexts,
+                                  dialogType: DialogType.warning,
+                                  animType: AnimType.bottomSlide,
+                                  title: 'Confirmation',
+                                  desc:
+                                      'Are you sure you want to delete this customer?',
+                                  btnCancelOnPress: () {},
+                                  btnCancelText: 'Cancel',
+                                  btnOkOnPress: () {
+                                    // Perform delete operation
+                                    deleteCustomer(
+                                            id,
+                                            _customersController
+                                                .items[index].cid)
+                                        .whenComplete(() {
+                                      _customersController.items.removeWhere(
+                                          (item) =>
+                                              item.cid ==
+                                              _customersController
+                                                  .items[index].cid);
+                                      // Refresh UI
+                                      _customersController.items.refresh();
+                                      // Show success message
+                                      Get.snackbar('Success',
+                                          'Customer deleted successfully');
+                                    }).catchError((error) {
+                                      // Show error message if deletion fails
+                                      Get.snackbar('Error',
+                                          'Failed to delete customer: $error');
+                                    });
+                                  },
+                                  btnOkText: 'Delete',
+                                ).show();
+
+                                // var del_id =
+                                //     _customersController.items[index].cid;
+                                // print(del_id);
+                                // _awasomeDailogBox(context);
+                                // deleteCustomer(id, del_id).whenComplete(() {
+                                //   _customersController.items
+                                //       .removeWhere((item) => item.cid == del_id);
+                                //   // Refresh UI
+                                //   _customersController.items.refresh();
+                                // });
+                              },
+                              backgroundColor: Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                            ),
+                          ]),
+                          child: Card(
+                            elevation: 12,
+                            margin: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 25),
+                            child: ListTile(
+                              leading: Container(
+                                child: src == ""
+                                    ? CircleAvatar(
+                                        radius: 27,
+                                        backgroundImage:
+                                            AssetImage('assets/images/my.jpg'),
+                                      )
+                                    : CachedNetworkImage(
+                                        width: 50,
+                                        height: 50,
+                                        imageUrl: Myurl.fullurl +
+                                            Myurl.imageurl +
+                                            src,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
+                                        placeholder: (context, url) =>
+                                            CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                       ),
-                                      placeholder: (context, url) =>
-                                          CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                              ),
+                              title: Text(
+                                _customersController.items[index].cname,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                  _customersController.items[index].cphone),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChooseTransition(
+                                        _customersController.items[index],
+                                      ),
                                     ),
-                            ),
-                            title: Text(
-                              _customersController.items[index].cname,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle:
-                                Text(_customersController.items[index].cphone),
-                            trailing: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChooseTransition(
-                                      _customersController.items[index],
-                                    ),
-                                  ),
-                                );
-                              },
-                              icon: Icon(Icons.add),
+                                  );
+                                },
+                                icon: Icon(Icons.add),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

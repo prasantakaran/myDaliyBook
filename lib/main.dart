@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:mypay/ThemeScreen/theme_changer.dart';
-import 'package:mypay/calculator/custom_textfield.dart';
 import 'package:mypay/screen/splash.dart';
-import 'package:mypay/screen/you_give.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

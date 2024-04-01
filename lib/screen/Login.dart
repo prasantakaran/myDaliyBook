@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_const_constructors, use_build_context_synchronously, curly_braces_in_flow_control_structures, body_might_complete_normally_nullable, unrelated_type_equality_checks, avoid_print, avoid_unnecessary_containers
 
 import 'dart:convert';
 import 'dart:ui';
@@ -14,7 +14,6 @@ import 'package:mypay/screen/splash.dart';
 import 'package:mypay/url/db_connection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:showcaseview/showcaseview.dart';
 
 class LoginUser extends StatefulWidget {
   const LoginUser({super.key});

@@ -15,6 +15,7 @@ class _YouGiveState extends State<YouGive> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 175, 135, 215),
         title: Text('You will Give'),
       ),
       body: Padding(

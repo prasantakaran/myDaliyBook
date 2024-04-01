@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, unnecessary_import, no_logic_in_create_state, use_key_in_widget_constructors, prefer_const_constructors, avoid_unnecessary_containers
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,7 @@ class _ChooseTransitionState extends State<ChooseTransition> {
     ThemeController themeCon = Get.put(ThemeController());
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 175, 135, 215),
         title: Text('Select Tab.'),
       ),
       body: Column(
