@@ -19,3 +19,10 @@ class UserDetails {
     required this.m_bookname,
   });
 }
+
+class StoreEmail {
+  static String email = '';
+  StoreEmail(e) {
+    email = e;
+  }
+}

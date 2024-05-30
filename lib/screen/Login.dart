@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_const_constructors, use_build_context_synchronously, curly_braces_in_flow_control_structures, body_might_complete_normally_nullable, unrelated_type_equality_checks, avoid_print, avoid_unnecessary_containers
+// ignore_for_file: unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings, prefer_const_constructors, use_build_context_synchronously, curly_braces_in_flow_control_structures, body_might_complete_normally_nullable, unrelated_type_equality_checks, avoid_print, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
 import 'dart:ui';
@@ -6,9 +6,13 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:mypay/Model_Class/User_Details.dart';
+import 'package:mypay/ThemeScreen/Theme_controller.dart';
+import 'package:mypay/main.dart';
 import 'package:mypay/screen/Colors_Palette.dart';
 import 'package:mypay/screen/dashboard.dart';
+import 'package:mypay/screen/email_verification.dart';
 import 'package:mypay/screen/loading.dart';
 import 'package:mypay/screen/splash.dart';
 import 'package:mypay/url/db_connection.dart';
@@ -44,11 +48,11 @@ class _LoginUserState extends State<LoginUser> {
 
   final bookNameFormkey = GlobalKey<FormState>();
   TextEditingController bookNameController = TextEditingController();
+  ThemeController _themeController = Get.put(ThemeController());
 
   late SharedPreferences sp;
 
   Future<void> getLogin(String email, String password) async {
-    Map data = {'uemail': email, 'upassword': password};
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -56,6 +60,7 @@ class _LoginUserState extends State<LoginUser> {
     );
 
     try {
+      Map data = {'uemail': email, 'upassword': password};
       var res =
           await http.post(Uri.parse(Myurl.fullurl + "login.php"), body: data);
       var jsondata = jsonDecode(res.body.toString());
@@ -106,7 +111,7 @@ class _LoginUserState extends State<LoginUser> {
       Navigator.of(context).pop();
 
       print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: 'Please try after sometimes.');
     }
   }
 
@@ -157,17 +162,6 @@ class _LoginUserState extends State<LoginUser> {
         sp.setBool(myDealyBookSplashState.keySP, true);
         Navigator.pop(context);
 
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => ShowCaseWidget(
-        //       builder: Builder(
-        //         builder: (context) => Dashboard(),
-        //       ),
-        //     ),
-        //   ),
-        // );
-
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Dashboard()));
 
@@ -177,10 +171,9 @@ class _LoginUserState extends State<LoginUser> {
         Fluttertoast.showToast(msg: jsondata['msg']);
       }
     } catch (e) {
-      Navigator.of(context).pop();
-
       print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
+      Navigator.of(context).pop();
     }
   }
 
@@ -395,6 +388,16 @@ class _LoginUserState extends State<LoginUser> {
                                         Radius.circular(35),
                                       ),
                                     ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(35),
+                                      ),
+                                    ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Palette.textColor1),
@@ -434,6 +437,16 @@ class _LoginUserState extends State<LoginUser> {
                                     prefixIcon: Icon(
                                       Icons.email_outlined,
                                       color: Colors.blueGrey,
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(35),
+                                      ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:
@@ -478,6 +491,16 @@ class _LoginUserState extends State<LoginUser> {
                                     prefixIcon: Icon(
                                       Icons.phone,
                                       color: Colors.blueGrey,
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(35),
+                                      ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:
@@ -536,6 +559,16 @@ class _LoginUserState extends State<LoginUser> {
                                     prefixIcon: const Icon(
                                       Icons.lock,
                                       color: Colors.blueGrey,
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(35),
+                                      ),
                                     ),
                                     enabledBorder: const OutlineInputBorder(
                                       borderSide:
@@ -706,6 +739,16 @@ class _LoginUserState extends State<LoginUser> {
                                       Icons.email_outlined,
                                       color: Colors.blueGrey,
                                     ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(35),
+                                      ),
+                                    ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Palette.textColor1),
@@ -763,6 +806,16 @@ class _LoginUserState extends State<LoginUser> {
                                       Icons.lock,
                                       color: Colors.blueGrey,
                                     ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(35),
+                                      ),
+                                    ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Palette.textColor1),
@@ -788,7 +841,14 @@ class _LoginUserState extends State<LoginUser> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  InputEmail()),
+                                        );
+                                      },
                                       child: Text('Forgot Password?'),
                                     )
                                   ],
@@ -828,61 +888,131 @@ class _LoginUserState extends State<LoginUser> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          // elevation: 100,
-                          shadowColor: Colors.transparent,
-                          surfaceTintColor: Color.fromARGB(255, 91, 35, 47),
-                          // backgroundColor: Colors.white,
-                          titleTextStyle:
-                              TextStyle(fontSize: 18, color: Colors.black),
-                          title: const Text(
-                            'Give your book name !',
-                            textAlign: TextAlign.center,
-                          ),
-                          content: Form(
-                            key: bookNameFormkey,
-                            child: TextFormField(
-                              validator: (value) {
-                                if (value!.isEmpty)
-                                  return 'Enter Book Name';
-                                else if (value.length < 4)
-                                  return 'Name must be more than 3 charater';
-                              },
-                              controller: bookNameController,
-                              decoration: InputDecoration(
-                                  errorBorder: InputBorder.none,
-                                  errorStyle: TextStyle(color: Colors.red)),
-                              autofocus: true,
+                        return BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                // width: 2.5,
+                                color: _themeController.isDark.value
+                                    ? Colors.white30
+                                    : Colors.black54,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                          ),
-                          actions: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            shadowColor: Colors.transparent,
+                            surfaceTintColor: Color.fromARGB(255, 91, 35, 47),
+                            titleTextStyle:
+                                TextStyle(fontSize: 18, color: Colors.black),
+                            title: Column(
                               children: [
-                                TextButton(
-                                  onPressed: () {
-                                    getRegistration(
-                                        nameController.text.toString().trim(),
-                                        emailController.text.toString().trim(),
-                                        phoneController.text.toString().trim(),
-                                        passwordController.text
-                                            .toString()
-                                            .trim(),
-                                        getGenderValue.toString().trim(),
-                                        'myDailyBook'.toString().trim());
-                                  },
-                                  child: const Text(
-                                    'Later',
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                Text(
+                                  'Hey! ${nameController.text.toString().trim().toUpperCase()} Give your book name !',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: _themeController.isDark.value
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    if (bookNameFormkey.currentState!
-                                        .validate()) {
+                                SizedBox(
+                                  height: 25,
+                                ),
+                                Form(
+                                  key: bookNameFormkey,
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty)
+                                        return 'Enter Book Name';
+                                      else if (value.length < 4)
+                                        return 'Name must be more than 3 charater';
+                                    },
+                                    controller: bookNameController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Enter book name.',
+                                      labelText: 'Bookname',
+                                      hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                      labelStyle: TextStyle(
+                                          fontSize: 13.5,
+                                          color: colorOfApp,
+                                          fontWeight: FontWeight.bold),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                        borderSide: BorderSide(
+                                            color: _themeController.isDark.value
+                                                ? Colors.white60
+                                                : Colors.black54),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                        borderSide: BorderSide(
+                                            color: _themeController.isDark.value
+                                                ? Colors.white60
+                                                : Colors.black54),
+                                      ),
+                                    ),
+                                    // autofocus: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // content: Form(
+                            //   key: bookNameFormkey,
+                            //   child: TextFormField(
+                            //     validator: (value) {
+                            //       if (value!.isEmpty)
+                            //         return 'Enter Book Name';
+                            //       else if (value.length < 4)
+                            //         return 'Name must be more than 3 charater';
+                            //     },
+                            //     controller: bookNameController,
+                            //     decoration: InputDecoration(
+                            //       hintText: 'Enter book name.',
+                            //       labelText: 'Bookname',
+                            //       hintStyle: TextStyle(
+                            //           fontSize: 14,
+                            //           fontWeight: FontWeight.w500),
+                            //       labelStyle: TextStyle(
+                            //           fontSize: 13.5,
+                            //           color: colorOfApp,
+                            //           fontWeight: FontWeight.bold),
+                            //       enabledBorder: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.all(
+                            //           Radius.circular(10),
+                            //         ),
+                            //         borderSide: BorderSide(
+                            //             color: _themeController.isDark.value
+                            //                 ? Colors.white60
+                            //                 : Colors.black54),
+                            //       ),
+                            //       focusedBorder: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.all(
+                            //           Radius.circular(10),
+                            //         ),
+                            //         borderSide: BorderSide(
+                            //             color: _themeController.isDark.value
+                            //                 ? Colors.white60
+                            //                 : Colors.black54),
+                            //       ),
+                            //     ),
+                            //     // autofocus: true,
+                            //   ),
+                            // ),
+                            actions: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
                                       getRegistration(
                                           nameController.text.toString().trim(),
                                           emailController.text
@@ -895,22 +1025,51 @@ class _LoginUserState extends State<LoginUser> {
                                               .toString()
                                               .trim(),
                                           getGenderValue.toString().trim(),
-                                          bookNameController.text
-                                              .toString()
-                                              .trim());
-                                    }
-                                  },
-                                  child: const Text(
-                                    'Yes',
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                          'myDailyBook'.toString().trim());
+                                    },
+                                    child: const Text(
+                                      'Later',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  TextButton(
+                                    onPressed: () {
+                                      if (bookNameFormkey.currentState!
+                                          .validate()) {
+                                        getRegistration(
+                                            nameController.text
+                                                .toString()
+                                                .trim(),
+                                            emailController.text
+                                                .toString()
+                                                .trim(),
+                                            phoneController.text
+                                                .toString()
+                                                .trim(),
+                                            passwordController.text
+                                                .toString()
+                                                .trim(),
+                                            getGenderValue.toString().trim(),
+                                            bookNameController.text
+                                                .toString()
+                                                .trim());
+                                      }
+                                    },
+                                    child: const Text(
+                                      'Yes',
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         );
                       },
                     );

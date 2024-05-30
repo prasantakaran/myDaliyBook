@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, duplicate_ignore, unused_local_variable, must_be_immutable
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, duplicate_ignore, unused_local_variable, must_be_immutable, await_only_futures, curly_braces_in_flow_control_structures, prefer_interpolation_to_compose_strings, prefer_final_fields, unnecessary_import, no_logic_in_create_state
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/get_core.dart';
@@ -14,6 +16,7 @@ import 'package:mypay/Model_Class/Customers_details.dart';
 import 'package:mypay/Model_Class/contacts_model.dart';
 import 'package:mypay/ThemeScreen/Theme_controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:mypay/main.dart';
 import 'package:mypay/url/db_connection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,15 +25,17 @@ import '../GetxController/Customers_controller.dart';
 class AddCustomer extends StatefulWidget {
   // String contact_name, contact_phone;
   Contacts contactsobj;
-  AddCustomer(this.contactsobj);
+  File? image;
+  AddCustomer(this.contactsobj, this.image);
 
   @override
-  State<AddCustomer> createState() => _AddCustomerState(contactsobj);
+  State<AddCustomer> createState() => _AddCustomerState(contactsobj, image);
 }
 
 class _AddCustomerState extends State<AddCustomer> {
   Contacts contactsobj;
-  _AddCustomerState(this.contactsobj);
+  File? image;
+  _AddCustomerState(this.contactsobj, this.image);
   final formKEY = GlobalKey<FormState>();
 
   var nameController = TextEditingController();
@@ -39,7 +44,6 @@ class _AddCustomerState extends State<AddCustomer> {
   bool isScroll = false;
   bool isButtonActive = false;
   ImagePicker picker = ImagePicker();
-  File? file;
   late SharedPreferences sp;
 
   CustomersController _controller = Get.put(CustomersController());
@@ -52,6 +56,8 @@ class _AddCustomerState extends State<AddCustomer> {
     phoneController = TextEditingController(text: contactsobj.phone);
     getlogin_id();
   }
+
+  File? file;
 
   String loginid = '';
   void getlogin_id() async {
@@ -69,7 +75,6 @@ class _AddCustomerState extends State<AddCustomer> {
         Uri.parse(Myurl.fullurl + "add_customer.php"),
         //  URI to which the request will be sent.
       );
-
       // These lines set the fields of the request.
       request.fields['uname'] = cname;
       request.fields['cid'] = customer_id;
@@ -99,20 +104,16 @@ class _AddCustomerState extends State<AddCustomer> {
 
         _controller.items.add(customerInfo);
 
-        sp = await SharedPreferences.getInstance();
-        sp.setString('sp_Cid', jsondata['c_id'].toString());
-        sp.setString('sp_Cname', jsondata['c_name']);
-        sp.setString('sp_Cphone', jsondata['c_phone']);
-        sp.setString('sp_Caddress', jsondata['c_address']);
-        sp.setString('sp_Cimage', jsondata['c_image']);
         AwesomeDialog(
           context: context,
           dialogType: DialogType.success,
           animType: AnimType.topSlide,
           showCloseIcon: false,
-          title: 'Customer Added!',
-          desc: "Yay! ${customerInfo.cname} Added Successfully.",
-          titleTextStyle: TextStyle(fontSize: 15),
+          descTextStyle: TextStyle(fontSize: 15),
+          title: 'Successfull.',
+          desc:
+              "Congratulations! Customer ${customerInfo.cname} has been successfully added.",
+          titleTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           dismissOnTouchOutside: false,
           dismissOnBackKeyPress: false,
           btnOkOnPress: () {
@@ -121,32 +122,21 @@ class _AddCustomerState extends State<AddCustomer> {
           },
         ).show();
         Get.snackbar(
-          backgroundColor: Color.fromARGB(255, 55, 111, 114),
+          backgroundColor: Color.fromARGB(173, 117, 210, 222),
           "",
           "",
-          titleText: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(
-                Icons.person_add,
-                size: 20,
-              ),
-              SizedBox(
-                width: 2,
-              ),
-              Text(
-                "Customer Added!",
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-              ),
-            ],
+          titleText: AutoSizeText(
+            "Added!",
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
           ),
           messageText: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
               style: TextStyle(fontSize: 15),
               children: [
-                TextSpan(text: "Yay! "),
+                TextSpan(text: "Congratulations! "),
                 TextSpan(
                   text: customerInfo.cname,
                   style: TextStyle(
@@ -156,20 +146,20 @@ class _AddCustomerState extends State<AddCustomer> {
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.3),
                 ),
-                TextSpan(text: " Added Successfully."),
+                TextSpan(text: " has been successfully added."),
               ],
             ),
           ),
         );
       } else {
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
-
         Fluttertoast.showToast(msg: jsondata['msg']);
+        Navigator.pop(context);
       }
     } catch (e) {
       print('${e.toString()} error in code');
       Fluttertoast.showToast(msg: e.toString());
+      Navigator.pop(context);
     }
   }
 
@@ -185,8 +175,11 @@ class _AddCustomerState extends State<AddCustomer> {
       fontWeight: FontWeight.normal,
     );
     return Scaffold(
+      backgroundColor: themeController.isDark.value
+          ? Color.fromARGB(255, 7, 16, 34)
+          : Colors.white,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 175, 135, 215),
+        backgroundColor: colorOfApp,
         title: Text("Add Customer"),
       ),
       body: Column(
@@ -210,11 +203,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         : Colors.white,
                     boxShadow: [
                       BoxShadow(
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                          color: themeController.isDark.value
-                              ? Colors.white54
-                              : Colors.black)
+                          blurRadius: 5, spreadRadius: 2, color: colorOfApp)
                     ],
                   ),
                   child: SingleChildScrollView(
@@ -305,6 +294,9 @@ class _AddCustomerState extends State<AddCustomer> {
                             padding: EdgeInsets.symmetric(vertical: 40),
                             width: MediaQuery.of(context).size.width,
                             child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: colorOfApp,
+                              ),
                               onPressed: () {
                                 if (formKEY.currentState!.validate()) {
                                   setState(() {
@@ -316,7 +308,7 @@ class _AddCustomerState extends State<AddCustomer> {
                                       phoneController.text.trim(),
                                       addressController.text.trim(),
                                       loginid.trim(),
-                                      file);
+                                      file ?? image);
                                 } else {
                                   setState(() {
                                     isScroll = !isScroll;
@@ -330,9 +322,13 @@ class _AddCustomerState extends State<AddCustomer> {
                                       padding: const EdgeInsets.all(10),
                                       child: CircularProgressIndicator(
                                         strokeWidth: 4,
+                                        color: Colors.blueGrey,
                                       ),
                                     )
                                   : Icon(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
                                       Icons.person_add,
                                       size: 28,
                                     ),
@@ -340,12 +336,18 @@ class _AddCustomerState extends State<AddCustomer> {
                                   ? Text(
                                       'Adding ..',
                                       style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     )
                                   : Text(
                                       'Add',
                                       style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -381,38 +383,37 @@ class _AddCustomerState extends State<AddCustomer> {
             width: 170,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              // color: Colors.blueGrey,]
               color: themeController.isDark.value
                   ? Colors.indigo[50]
                   : Colors.white,
               boxShadow: [
                 if (isShadow)
-                  BoxShadow(
-                      spreadRadius: 2,
-                      blurRadius: 10,
-                      color: themeController.isDark.value
-                          ? Colors.white54
-                          : Colors.black)
+                  BoxShadow(spreadRadius: 2, blurRadius: 5, color: colorOfApp)
               ],
             ),
             child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(100),
+              ),
               child: file != null
                   ? ClipOval(
                       child: Image.file(
                         file!,
                       ),
                     )
-                  : CircleAvatar(
-                      backgroundColor: Colors.black45,
-                      child: Icon(
-                        Icons.person,
-                        size: 120,
-                      ),
-                    ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(100),
-              ),
+                  : image != null
+                      ? CircleAvatar(
+                          backgroundColor: Colors.black45,
+                          backgroundImage: FileImage(image!),
+                        )
+                      : CircleAvatar(
+                          backgroundColor: colorOfApp,
+                          child: Icon(
+                            Icons.person,
+                            size: 80,
+                          ),
+                        ),
             ),
           ),
           TextButton.icon(
@@ -424,11 +425,12 @@ class _AddCustomerState extends State<AddCustomer> {
             },
             icon: Icon(
               Icons.add_a_photo_outlined,
+              color: colorOfApp,
               size: 20,
             ),
             label: Text(
               'Add Photo',
-              style: TextStyle(fontSize: 13),
+              style: TextStyle(fontSize: 13, color: colorOfApp),
             ),
           ),
         ],

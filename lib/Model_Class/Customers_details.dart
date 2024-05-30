@@ -1,17 +1,3 @@
-// class InsertCustomerInfo {
-//   String m_cid = '',
-//       m_cname = '',
-//       m_cphone = '',
-//       m_cimage = '',
-//       m_caddress = '';
-//   InsertCustomerInfo(
-//       {required this.m_cid,
-//       required this.m_cname,
-//       required this.m_cphone,
-//       required this.m_cimage,
-//       required this.m_caddress});
-// }
-
 class AllCustomers {
   String cid = '', cname = '', cphone = '', cimage = '', caddress = '';
   AllCustomers(
@@ -20,4 +6,18 @@ class AllCustomers {
       required this.cphone,
       required this.cimage,
       required this.caddress});
+}
+
+class TransactionCustomers {
+  String t_cid = '',
+      t_cname = '',
+      t_cphone = '',
+      t_cimage = '',
+      t_caddress = '';
+  TransactionCustomers(
+      {required this.t_cid,
+      required this.t_cname,
+      required this.t_cphone,
+      required this.t_cimage,
+      required this.t_caddress});
 }

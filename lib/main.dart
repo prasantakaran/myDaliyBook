@@ -1,8 +1,16 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:mypay/ThemeScreen/theme_changer.dart';
 import 'package:mypay/screen/splash.dart';
+
+final titleColor = Color(0xff444444);
+final startColor = Color(0xFFaa7ce4);
+final endColor = Color(0xFFe46792);
+final colorOfApp = Color.fromARGB(255, 39, 188, 208);
+// final colorOfApp = Color.fromARGB(255, 23, 117, 194);
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

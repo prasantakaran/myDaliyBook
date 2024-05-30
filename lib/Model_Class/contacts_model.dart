@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 class Contacts {
   String phone = '', name = '';
-  Contacts(this.phone, this.name);
+  Uint8List? photo;
+  Contacts(this.phone, this.name, this.photo);
 }

@@ -1,12 +1,13 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mypay/ThemeScreen/Theme_controller.dart';
+import 'package:mypay/main.dart';
 import 'package:mypay/screen/Login.dart';
 import 'package:mypay/screen/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 class myDealyBookSplash extends StatefulWidget {
   const myDealyBookSplash({super.key});
@@ -29,6 +30,12 @@ class myDealyBookSplashState extends State<myDealyBookSplash> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
           overlays: [SystemUiOverlay.top]);
+
+      SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light));
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+      );
     });
     getThemeValue();
   }
@@ -72,72 +79,73 @@ class myDealyBookSplashState extends State<myDealyBookSplash> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(color: Colors.black),
-        child: Stack(
-          children: [
-            Column(children: [
-              Image.asset(
-                "assets/images/mybook.png",
-                scale: 1,
-              ),
-            ]),
-            AnimatedPositioned(
-              duration: Duration(seconds: 5),
-              height: 50,
-              width: MediaQuery.of(context).size.width * .8,
-              left: isanimated
-                  ? MediaQuery.of(context).size.height * .05
-                  : -MediaQuery.of(context).size.height * 1,
-              bottom: MediaQuery.of(context).size.height * .40,
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'my \n ',
-                      style: TextStyle(
-                          fontFamily: 'KaushanScript',
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(color: Colors.black),
+          child: Stack(
+            children: [
+              Column(children: [
+                Center(
+                  child: Lottie.asset(
+                    'assets/lottie/mydailybook_loading1.json',
+                    width: 200,
+                    height: 200,
+                  ),
+                ),
+              ]),
+              AnimatedPositioned(
+                duration: Duration(seconds: 5),
+                height: 50,
+                width: MediaQuery.of(context).size.width * .8,
+                left: isanimated
+                    ? MediaQuery.of(context).size.height * .05
+                    : -MediaQuery.of(context).size.height * 1,
+                bottom: MediaQuery.of(context).size.height * .40,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'my \n ',
+                        style: TextStyle(
+                            fontFamily: 'KaushanScript',
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            AnimatedPositioned(
-              duration: Duration(seconds: 5),
-              height: 50,
-              width: MediaQuery.of(context).size.width * .5,
-              right: isanimated
-                  ? MediaQuery.of(context).size.height * .09
-                  : -MediaQuery.of(context).size.height * .1,
-              bottom: MediaQuery.of(context).size.height * .36,
-              child: const Text(
-                ' DailyBook',
-                style: TextStyle(
-                  fontFamily: 'KaushanScript',
-                  color: Colors.white,
-                  fontSize: 28,
+              AnimatedPositioned(
+                duration: Duration(seconds: 5),
+                height: 50,
+                width: MediaQuery.of(context).size.width * .5,
+                right: isanimated
+                    ? MediaQuery.of(context).size.height * .09
+                    : -MediaQuery.of(context).size.height * .1,
+                bottom: MediaQuery.of(context).size.height * .36,
+                child: const Text(
+                  ' DailyBook',
+                  style: TextStyle(
+                    fontFamily: 'KaushanScript',
+                    color: Colors.white,
+                    fontSize: 28,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: const Text(
-                'Develop By Prasanta',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 15),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: const Text(
+                  'Develop By Prasanta',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget showBottomDailog() {
-    return showBottomDailog();
   }
 }
