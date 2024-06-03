@@ -16,6 +16,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: SystemUiOverlay.values);
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,

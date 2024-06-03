@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mypay/ThemeScreen/Theme_controller.dart';
@@ -34,8 +38,7 @@ class myDealyBookSplashState extends State<myDealyBookSplash> {
       SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light));
       SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
-      );
+          SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
     });
     getThemeValue();
   }
@@ -81,69 +84,91 @@ class myDealyBookSplashState extends State<myDealyBookSplash> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(color: Colors.black),
-          child: Stack(
-            children: [
-              Column(children: [
-                Center(
-                  child: Lottie.asset(
-                    'assets/lottie/mydailybook_loading1.json',
-                    width: 200,
-                    height: 200,
-                  ),
-                ),
-              ]),
-              AnimatedPositioned(
-                duration: Duration(seconds: 5),
-                height: 50,
-                width: MediaQuery.of(context).size.width * .8,
-                left: isanimated
-                    ? MediaQuery.of(context).size.height * .05
-                    : -MediaQuery.of(context).size.height * 1,
-                bottom: MediaQuery.of(context).size.height * .40,
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: const TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'my \n ',
-                        style: TextStyle(
-                            fontFamily: 'KaushanScript',
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
+        backgroundColor: Colors.transparent,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(color: Colors.black),
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Center(
+                          child: Lottie.asset(
+                            'assets/lottie/mydailybook_loading1.json',
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                      ],
+                    ),
+                    AnimatedPositioned(
+                      duration: Duration(seconds: 5),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * .8,
+                      left: isanimated
+                          ? MediaQuery.of(context).size.height * .05
+                          : -MediaQuery.of(context).size.height * 1,
+                      bottom: MediaQuery.of(context).size.height * .40,
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'my \n ',
+                              style: TextStyle(
+                                  fontFamily: 'KaushanScript',
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    AnimatedPositioned(
+                      duration: Duration(seconds: 5),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * .5,
+                      right: isanimated
+                          ? MediaQuery.of(context).size.height * .09
+                          : -MediaQuery.of(context).size.height * .1,
+                      bottom: MediaQuery.of(context).size.height * .36,
+                      child: const Text(
+                        ' DailyBook',
+                        style: TextStyle(
+                          fontFamily: 'KaushanScript',
+                          color: Colors.white,
+                          fontSize: 28,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              AnimatedPositioned(
-                duration: Duration(seconds: 5),
-                height: 50,
-                width: MediaQuery.of(context).size.width * .5,
-                right: isanimated
-                    ? MediaQuery.of(context).size.height * .09
-                    : -MediaQuery.of(context).size.height * .1,
-                bottom: MediaQuery.of(context).size.height * .36,
-                child: const Text(
-                  ' DailyBook',
-                  style: TextStyle(
-                    fontFamily: 'KaushanScript',
-                    color: Colors.white,
-                    fontSize: 28,
-                  ),
+            ),
+            Container(
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: colorOfApp,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                child: const Text(
-                  'Develop By Prasanta',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
+              alignment: Alignment.bottomCenter,
+              child: const Text(
+                'Develop by Prasanta',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
