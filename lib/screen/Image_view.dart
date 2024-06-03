@@ -121,6 +121,7 @@ class customers_image extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => CustomerProfile(customers)),
                       );
+                      DeleteFromWhere('deleteData');
                     },
                     child: RichText(
                       text: TextSpan(
@@ -140,16 +141,7 @@ class customers_image extends StatelessWidget {
                           TextSpan(text: 'profile.')
                         ],
                       ),
-                    )
-                    //  Text(
-                    //   "View ${customers.cname}'s Profile",
-                    //   textAlign: TextAlign.center,
-                    //   style: TextStyle(
-                    // fontSize: 13.5,
-                    // letterSpacing: 0.3,
-                    // fontWeight: FontWeight.w600),
-                    // ),
-                    ),
+                    )),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

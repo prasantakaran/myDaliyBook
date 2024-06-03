@@ -21,3 +21,10 @@ class TransactionCustomers {
       required this.t_cimage,
       required this.t_caddress});
 }
+
+class DeleteFromWhere {
+  static String value = '';
+  DeleteFromWhere(val) {
+    value = val;
+  }
+}

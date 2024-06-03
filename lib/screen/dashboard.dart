@@ -256,7 +256,6 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   Future<void> checkAuth() async {
     bool isAvailable;
     isAvailable = await auth.canCheckBiometrics;
-    print(isAvailable);
 
     if (isAvailable) {
       bool result = await auth.authenticate(

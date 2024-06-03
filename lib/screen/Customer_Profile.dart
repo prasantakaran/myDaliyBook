@@ -229,6 +229,25 @@ class _CustomerProfileState extends State<CustomerProfile> {
     getuser_id();
   }
 
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunch(launchUri.toString())) {
+      await launch(launchUri.toString());
+    } else {
+      throw 'Could not launch $launchUri';
+    }
+  }
+
+  @override
+  void dispose() {
+    DeleteFromWhere.value = '';
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -506,14 +525,17 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                 ),
                                 child: IconButton(
                                   onPressed: () async {
-                                    // _makePhoneCall('');
-                                    // ignore: non_constant_identifier_names
-                                    final String phone_number = "7501425625";
-                                    String phoneurl = "tel:$phone_number";
-                                    if (await canLaunch(phoneurl)) {
-                                      await launch(phoneurl);
-                                    } else {
-                                      print("Can't phone that number.");
+                                    try {
+                                      await _makePhoneCall(
+                                          customerPhone.text.toString());
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Could not launch phone call'),
+                                        ),
+                                      );
                                     }
                                   },
                                   icon: Icon(
@@ -598,13 +620,21 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             'Are you sure you want to delete ${customerInfo.cname}?',
                         btnCancelOnPress: () {},
                         btnOkOnPress: () {
-                          deleteCustomer(userid, del_id).whenComplete(
-                            () {
-                              deleteItem(del_id);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          );
+                          DeleteFromWhere.value == 'deleteData'
+                              ? deleteCustomer(userid, del_id).whenComplete(
+                                  () {
+                                    deleteItem(del_id);
+                                    // Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              : deleteCustomer(userid, del_id).whenComplete(
+                                  () {
+                                    deleteItem(del_id);
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                );
                         },
                       ).show();
                     },
@@ -738,20 +768,5 @@ class _CustomerProfileState extends State<CustomerProfile> {
         ],
       ),
     );
-  }
-
-  void _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-
-    if (await canLaunch(launchUri.toString())) {
-      await launch(launchUri.toString());
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch $phoneNumber')),
-      );
-    }
   }
 }
